@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSurveyRequest {
-    private String question;
-    private long topicId;
+public class CreateTopicRequest {
+    private String title;
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Entity
@@ -17,9 +18,9 @@ public class Survey {
     private LocalDate createTime;
     @Column(name = "question")
     private String question;
-    @Column(name = "feedback")
-    private String feedback;
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;
+    @OneToMany(mappedBy = "survey")
+    private Set<UserResponses> userResponses;
 }

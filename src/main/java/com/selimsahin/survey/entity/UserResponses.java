@@ -1,5 +1,7 @@
 package com.selimsahin.survey.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 public class UserResponses {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private long id;
     @Column(name = "answer")
     private String answer;
@@ -18,4 +21,8 @@ public class UserResponses {
     private int score;
     @Column(name = "createTime")
     private LocalDate createTime;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "survey_id", nullable = false)
+    private Survey survey;
 }

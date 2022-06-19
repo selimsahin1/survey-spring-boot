@@ -5,12 +5,12 @@ import com.selimsahin.survey.entity.Topic;
 import com.selimsahin.survey.exception.CloudException;
 import com.selimsahin.survey.exception.HttpExceptionEnum;
 import com.selimsahin.survey.repository.TopicRepository;
+import com.selimsahin.survey.request.CreateSurveyRequest;
+import com.selimsahin.survey.request.CreateTopicRequest;
 import com.selimsahin.survey.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import response.BaseResponse;
 
 import java.util.List;
 
@@ -30,5 +30,11 @@ public class TopicController {
             e.printStackTrace();
             throw new CloudException(HttpExceptionEnum.HTTP_INVALID_PARAMETER);
         }
+    }
+
+    @PostMapping(value = "create-topic")
+    public BaseResponse createTopic(@RequestBody CreateTopicRequest createTopicRequest) throws CloudException {
+        topicService.saveTopic(createTopicRequest);
+        return new BaseResponse<>();
     }
 }

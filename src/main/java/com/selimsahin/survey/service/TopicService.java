@@ -2,12 +2,16 @@ package com.selimsahin.survey.service;
 
 import com.selimsahin.survey.entity.Survey;
 import com.selimsahin.survey.entity.Topic;
+import com.selimsahin.survey.entity.UserResponses;
+import com.selimsahin.survey.exception.CloudException;
 import com.selimsahin.survey.repository.SurveyRepository;
 import com.selimsahin.survey.repository.TopicRepository;
 import com.selimsahin.survey.repository.UserResponsesRepository;
+import com.selimsahin.survey.request.CreateTopicRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +25,12 @@ public class TopicService {
     @Autowired
     TopicRepository topicRepository;
 
+    public Topic saveTopic(CreateTopicRequest createTopicRequest) throws CloudException {
+        Topic topic = new Topic();
+        topic.setTitle(createTopicRequest.getTitle());
+        return topicRepository.save(topic);
+    }
+
     public void saveNPS(long id) {
         Topic topic = getTopicBySurveyId(id);
         topic = calculateNPS(topic);
@@ -28,11 +38,11 @@ public class TopicService {
     }
 
     public Topic calculateNPS(Topic topic) {
-        long supporterCount = userResponsesRepository.findByScoreGreaterThan(8L).size();
-        long perpetratorCount = userResponsesRepository.findByScoreLessThan(7L).size();
+        List<UserResponses> supporters = userResponsesRepository.findByScoreGreaterThan(8);
+        List<UserResponses> perpetrator = userResponsesRepository.findByScoreLessThan(7);
         long respondentsCount = userResponsesRepository.count();
 
-        double nps = ((double) supporterCount - perpetratorCount) / respondentsCount * 100d;
+        double nps = ((double) supporters.size() - perpetrator.size()) / respondentsCount * 100d;
 
         topic.setNpsScore(nps);
         return topic;
