@@ -23,9 +23,12 @@ public class TopicController {
     TopicRepository topicRepository;
 
     @GetMapping(value = "/list-survey-topics")
-    public List<Topic> listSurveyTopics(@RequestParam Long id) throws CloudException {
+    public List<Topic> listSurveyTopics(@RequestParam(required = false) Long id) throws CloudException {
         try {
-            return topicRepository.findAllById(id);
+            if (id == null)
+                return topicRepository.findAll();
+            else
+                return topicRepository.findAllById(id);
         } catch (Exception e) {
             e.printStackTrace();
             throw new CloudException(HttpExceptionEnum.HTTP_INVALID_PARAMETER);

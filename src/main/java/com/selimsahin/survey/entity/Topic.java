@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -15,6 +16,7 @@ public class Topic {
     @JsonIgnore
     private long id;
     @Column(name = "title")
+    @NotBlank(message = "Title is mandatory")
     private String title;
     @Column(name = "npmScore")
     private double npsScore;
