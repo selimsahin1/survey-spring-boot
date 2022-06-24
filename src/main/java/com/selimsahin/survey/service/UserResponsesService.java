@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Service
 public class UserResponsesService {
     @Autowired
-    TopicService topicService;
-    @Autowired
     UserResponsesRepository userResponsesRepository;
     @Autowired
     SurveyRepository surveyRepository;

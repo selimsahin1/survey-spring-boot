@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 public class CreateSurveyRequest {
     @NotBlank(message = "Question is mandatory")
     private String question;
-    @NotNull(message = "Topic Id is mandatory")
-    private long topicId;
+    @NotBlank(message = "Topic is mandatory")
+    private String topic;
 }

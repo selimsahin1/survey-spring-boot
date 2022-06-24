@@ -3,6 +3,7 @@ package com.selimsahin.survey.exception;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,7 +37,9 @@ public class ControllerExceptionHandler {
 
         if (ex instanceof CloudException) {
             result = new BaseResponse(((CloudException) ex).exceptionCode(), ex.getMessage(), ex.getMessage());
-        } else if (ex instanceof IllegalArgumentException || ex instanceof HttpMessageNotReadableException) {
+        } else if (ex instanceof IllegalArgumentException
+                || ex instanceof HttpMessageNotReadableException
+                || ex instanceof DataIntegrityViolationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             result = new BaseResponse(HttpExceptionEnum.HTTP_INVALID_PARAMETER, ex.getMessage());
         } else if (ex instanceof BindException || ex instanceof MethodArgumentNotValidException) {
@@ -49,8 +52,8 @@ public class ControllerExceptionHandler {
             result = new BaseResponse(HttpExceptionEnum.HTTP_INVALID_PARAMETER, helpMsg);
         } else if (((TransactionSystemException) ex).getRootCause() instanceof ConstraintViolationException) {
             Set<ConstraintViolation<?>> constraintViolations
-                    = ((ConstraintViolationException) ((TransactionSystemException) ex).getRootCause()).getConstraintViolations();
-            // do something here
+                    = ((ConstraintViolationException) ((TransactionSystemException) ex)
+                    .getRootCause()).getConstraintViolations();
             final List<Object> errors = new ArrayList<>();
             constraintViolations.stream().forEach(fieldError -> {
                 Map<String, Object> error = new HashMap<>();

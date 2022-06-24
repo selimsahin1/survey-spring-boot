@@ -1,20 +1,18 @@
 package com.selimsahin.survey.controller;
 
-import com.selimsahin.survey.entity.Survey;
 import com.selimsahin.survey.entity.UserResponses;
 import com.selimsahin.survey.exception.CloudException;
 import com.selimsahin.survey.exception.HttpExceptionEnum;
 import com.selimsahin.survey.repository.SurveyRepository;
 import com.selimsahin.survey.repository.UserResponsesRepository;
 import com.selimsahin.survey.request.SubmitUserResponseRequest;
-import com.selimsahin.survey.service.TopicService;
+import com.selimsahin.survey.service.SurveyService;
 import com.selimsahin.survey.service.UserResponsesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import response.BaseResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -24,7 +22,7 @@ public class UserResponsesController {
     @Autowired
     UserResponsesService saveUserResponseService;
     @Autowired
-    TopicService topicService;
+    SurveyService surveyService;
     @Autowired
     SurveyRepository surveyRepository;
 
@@ -32,7 +30,7 @@ public class UserResponsesController {
     public BaseResponse submitSurvey(@RequestBody SubmitUserResponseRequest submitUserResponseRequest)
             throws CloudException {
         saveUserResponseService.saveUserResponse(submitUserResponseRequest);
-        topicService.saveNPS(submitUserResponseRequest.getSurveyId());
+        surveyService.saveNPS(submitUserResponseRequest.getSurveyId());
         return new BaseResponse<>();
     }
 

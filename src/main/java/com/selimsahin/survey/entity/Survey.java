@@ -1,5 +1,6 @@
 package com.selimsahin.survey.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,13 +15,16 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @JsonIgnore
     @Column(name = "createTime")
     private LocalDate createTime;
+    @Column(name = "topic", unique = true)
+    private String topic;
     @Column(name = "question")
     private String question;
-    @ManyToOne
-    @JoinColumn(name = "topic_id", nullable = false)
-    private Topic topic;
+    @Column(name = "npmScore")
+    private double npsScore;
+    @JsonIgnore
     @OneToMany(mappedBy = "survey")
     private Set<UserResponses> userResponses;
 }
